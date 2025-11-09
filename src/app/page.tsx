@@ -1,17 +1,17 @@
-import { requireAuth } from '@/lib/auth-utils';
-import { caller } from '@/trpc/server';
+"use client";
 
-const Page = async() => {
-  await requireAuth();
+import { authClient } from '@/lib/auth-client';
 
-  const data = await caller.getUsers();
-
+const Page = () => {
+  const {data} = authClient.useSession();
   return (
     <div>
-      Protected page
       {JSON.stringify(data)}
+      {data && (
+        <button className='bg-destructive' onClick={() => authClient.signOut()}>Logout</button>
+      )}
     </div>
-  );
-};
+  )
+}
 
-export default Page;
+export default Page
